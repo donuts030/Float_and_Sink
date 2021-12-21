@@ -122,10 +122,11 @@ function player(baseVar){
     
 }
 
-function collisionDetection(){
+function collisionDetection(tempPlayerX, tempPlayerY){
     const blockLength = canvas.width / baseVar.cellNum;// combine later
     const playerWidth = blockLength - 1;
     const playerHeight = playerWidth;
+    let collided = false
     for(let col = 0; col < baseVar.cellNum; col++){
         for(let row = 0; row < baseVar.cellNum; row++){
             if (baseVar.grid[row][col] === 0) {
@@ -134,16 +135,19 @@ function collisionDetection(){
                 let gridY = row * blockLength;
                 // if (row == 9)
                 //     console.log ("gridX:" + gridX + " playX:" + baseVar.x);
-                if ((Math.abs(gridX - baseVar.x) < playerWidth) 
-                    && (Math.abs(gridY - baseVar.y) < playerHeight )){
+                if ((Math.abs(gridX - tempPlayerX) < playerWidth) 
+                    && (Math.abs(gridY - tempPlayerY) < playerHeight )){
                 
                     console.log("collided at :" + row + ", "+ col);
+
+                    collided = true;
 
                 }
 
             }
         }
     }
+    return collided;
 }
 
 
@@ -167,7 +171,11 @@ function playerMovement(playerSize){
             dx = 0
         }
 
-        baseVar.x += dx; 
+        tempPlayerX += dx;
+        if (collisionDetection(tempPlayerX, tempPlayerY) === false) {
+            baseVar.x = tempPlayerX;
+        }
+        //baseVar.x += dx; 
         rightPressed = false;
     }
     else if(leftPressed){
@@ -178,7 +186,12 @@ function playerMovement(playerSize){
             dx = 0
         }
         // if (baseVar.grid[row][col])
-        baseVar.x -= dx;
+
+        tempPlayerX -= dx;
+        if (collisionDetection(tempPlayerX, tempPlayerY) === false) {
+            baseVar.x = tempPlayerX;
+        }
+        //baseVar.x -= dx;
         leftPressed= false;
     }
 
@@ -199,9 +212,11 @@ function playerMovement(playerSize){
             dy = 0;
         }
     }
-    baseVar.y += dy;
+    tempPlayerY += dy;
+    if (collisionDetection(tempPlayerX, tempPlayerY) === false) {
+        baseVar.y = tempPlayerY;
+    }
     
-    collisionDetection();
         
        /*  if (baseVar.dy === 0) { // pos y not move
             let col = Math.floor((baseVar.y) / blockWidth); // find curr row num
