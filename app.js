@@ -28,6 +28,9 @@ const baseVar ={
             [0, 0, 0, 1, 1, 1, 1, 1, 0, 0],]
 }
 
+const cellLength = canvas.width / baseVar.cellNum;
+const playerSize = canvas.width / baseVar.cellNum - 1;
+
 start();
 // this function would only be called once at the start
 function start(){
@@ -41,7 +44,7 @@ function draw(){
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     createMaze(baseVar.grid);
-    player(baseVar);
+    player();
 }
 
 function playerCtrlPressed(e){
@@ -78,7 +81,7 @@ function createMaze(grid){
     for(let x = 0; x < baseVar.cellNum; x++){
         for(let y = 0; y < baseVar.cellNum; y++){
             let cellType = grid[y][x];
-            createBlock(baseVar.cellNum, x, y, cellType);
+            createBlock(x, y, cellType);
         }
     }
     
@@ -86,8 +89,7 @@ function createMaze(grid){
     
 }
 
-function createBlock(cellNum, x, y, cellType){
-    const cellLength = canvas.width / cellNum;
+function createBlock(x, y, cellType){
 
     //must set colour before drawing cell
     if (cellType === 0){
@@ -109,30 +111,26 @@ function createBlock(cellNum, x, y, cellType){
 
 
 
-function player(baseVar){
-    const cellNum = 10
-    const playerSize = canvas.width / cellNum - 1;
+function player(){
     ctx.beginPath();
     ctx.fillStyle = 'rgb(0, 255, 0)'
     ctx.fillRect(baseVar.x, baseVar.y, playerSize, playerSize);
     //ctx.fillStyle = 'rgb(' + parseInt(Math.random() * 255) + ',' + parseInt(Math.random() * 255) + ',' + parseInt(Math.random() * 255) + ')'
     ctx.closePath();
     //player movement 
-    playerMovement(playerSize);
-    
+    playerMovement();
 }
 
 function collisionDetection(tempPlayerX, tempPlayerY){
-    const blockLength = canvas.width / baseVar.cellNum;// combine later
-    const playerWidth = blockLength - 1;
+    const playerWidth = playerSize;
     const playerHeight = playerWidth;
     let collided = false
     for(let col = 0; col < baseVar.cellNum; col++){
         for(let row = 0; row < baseVar.cellNum; row++){
             if (baseVar.grid[row][col] === 0) {
                 //check if collided with player
-                let gridX = col * blockLength;
-                let gridY = row * blockLength;
+                let gridX = col * cellLength;
+                let gridY = row * cellLength;
                 // if (row == 9)
                 //     console.log ("gridX:" + gridX + " playX:" + baseVar.x);
                 if ((Math.abs(gridX - tempPlayerX) < playerWidth) 
@@ -151,16 +149,15 @@ function collisionDetection(tempPlayerX, tempPlayerY){
 }
 
 
-function playerMovement(playerSize){
+function playerMovement(){
 
     let dx = xSpeed;
     let dy = baseVar.dy;
     let tempPlayerX = baseVar.x;
     let tempPlayerY = baseVar.y;
 
-    const blockWidth = canvas.width / baseVar.cellNum;
-    let col = Math.floor(baseVar.x/ blockWidth);
-    let row = Math.floor(baseVar.y / blockWidth);
+    let col = Math.floor(baseVar.x/ cellLength);
+    let row = Math.floor(baseVar.y / cellLength);
 
 
     if (rightPressed) {
@@ -217,67 +214,5 @@ function playerMovement(playerSize){
         baseVar.y = tempPlayerY;
     }
     
-        
-       /*  if (baseVar.dy === 0) { // pos y not move
-            let col = Math.floor((baseVar.y) / blockWidth); // find curr row num
-            let row = Math.floor(baseVar.x / blockWidth); // find curr col num
-            if (col > 0 && baseVar.grid[col-1][row] !== 0) { // block above not wall 
-                baseVar.dy = -1; 
-            }
-            else if (col < 9 && baseVar.grid[col+1][row] !== 0) {
-                baseVar.dy = 1;
-            }
-        }
-        else {
-            baseVar.dy = -baseVar.dy;
-            console.log(baseVar.dy);
-        }
-        spacePressed = false;
-        console.log("pressed space dy=" +  baseVar.dy);
-    }
 
-    if (baseVar.dy > 0) {
-        if((baseVar.y + playerSize) > canvas.height){
-            baseVar.dy = 0;
-        }
-
-        let row = Math.floor(baseVar.x / blockWidth);
-        let col = Math.floor((baseVar.y + playerSize) / blockWidth);
-        
-        if(baseVar.grid[col][row] === 0){
-            baseVar.dy = 0
-        }
-
-        baseVar.y += baseVar.dy; 
-    }
-    else if (baseVar.dy < 0) {
-        if(baseVar.y <= 0){
-            baseVar.dy = 0;
-        }
-
-        let row = Math.floor(baseVar.x / blockWidth);
-        let col = Math.floor(baseVar.y / blockWidth);
-
-        if(baseVar.grid[col][row] === 0){
-            baseVar.dy = 0
-        }
-
-        baseVar.y += baseVar.dy;
-    }
-     */
-    // let colNum = Math.floor(baseVar.x / blockWidth);
-    // let rowNum = Math.floor(baseVar.y / blockWidth);
-
-    // if((baseVar.y + baseVar.dy) >= 0 && (baseVar.y + baseVar.dy) < (canvas.height - playerSize)){
-
-    //     baseVar.y += baseVar.dy;
-    // }    
-
-
-}
-
-function blockCollision(){
-    //use baseVar.grid to determine area of collision
-
-    
 }
