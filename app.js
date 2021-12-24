@@ -1,5 +1,7 @@
 const canvas=document.getElementById("playScreen");
 const ctx=canvas.getContext("2d");
+let interval = null;
+let started = false;
 let rightPressed = false;
 let leftPressed = false;
 let spacePressed = false;
@@ -16,8 +18,8 @@ const baseVar ={
     //number of cells in a row and in a column: can change to 2 diff values later
     cellNum: 10,
 
-    grid: [ [2, 0, 1, 1, 1, 0, 1, 1, 1, 0],
-            [1, 0, 0, 0, 1, 1, 1, 0, 1, 0],
+    grid: [ [2, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+            [0, 0, 0, 0, 1, 0, 1, 0, 1, 0],
             [1, 1, 1, 0, 0, 1, 0, 0, 1, 1],
             [0, 0, 1, 0, 0, 1, 0, 1, 0, 3],
             [0, 0, 1, 1, 0, 1, 0, 1, 1, 0],
@@ -31,12 +33,20 @@ const baseVar ={
 const cellLength = canvas.width / baseVar.cellNum;
 const playerSize = canvas.width / baseVar.cellNum - 1;
 
-start();
+document.addEventListener("keydown", playerCtrlPressed);
+document.addEventListener("keyup", playerCtrlReleased);
+
+function inputMapSize(){
+
+}
+
 // this function would only be called once at the start
-function start(){
-    document.addEventListener("keydown", playerCtrlPressed);
-    document.addEventListener("keyup", playerCtrlReleased);
-    setInterval(() => {draw()}, 10);
+function start(){  
+    baseVar.x = 0;
+    baseVar.y = 0;
+    document.getElementById("complete").style.display = "none";
+    interval = setInterval(() => {draw()}, 10);
+
 }
 
 // this function runs once each time frame is refeshed
@@ -55,19 +65,26 @@ function playerCtrlPressed(e){
         leftPressed = true;
     }
     else if(e.keyCode === 32) { //left
+        e.preventDefault();
         console.log("pressed space");
         spacePressed = true;
+        if(started === false){
+            document.getElementById("startscreen").style.display = "none";
+            started = true;
+            document.querySelector("canvas").style.display = "block";
+            start();
+        }
     }
 }
 
 function playerCtrlReleased(e){
     console.log(e);
-    // if(e.keyCode === 39) {
-    //     rightPressed = false;
-    // }
-    // else if(e.keyCode === 37) {
-    //     leftPressed = false;
-    // }
+    if(e.keyCode === 39) {
+        rightPressed = false;
+    }
+    else if(e.keyCode === 37) {
+        leftPressed = false;
+    }
 /*     else if(e.keyCode === 32) { //left
         spacePressed = false;
     } */
@@ -127,21 +144,31 @@ function collisionDetection(tempPlayerX, tempPlayerY){
     let collided = false
     for(let col = 0; col < baseVar.cellNum; col++){
         for(let row = 0; row < baseVar.cellNum; row++){
+            
+            let gridX = col * cellLength;
+            let gridY = row * cellLength;
+
             if (baseVar.grid[row][col] === 0) {
                 //check if collided with player
-                let gridX = col * cellLength;
-                let gridY = row * cellLength;
-                // if (row == 9)
-                //     console.log ("gridX:" + gridX + " playX:" + baseVar.x);
                 if ((Math.abs(gridX - tempPlayerX) < playerWidth) 
                     && (Math.abs(gridY - tempPlayerY) < playerHeight )){
                 
-                    console.log("collided at :" + row + ", "+ col);
+                    //console.log("collided at :" + row + ", "+ col);
 
                     collided = true;
 
                 }
+            }
+            else if(baseVar.grid[row][col] === 3){
+                if ((Math.abs(gridX - tempPlayerX) < 2) 
+                    && (Math.abs(gridY - tempPlayerY) < 2 )){
 
+                    console.log("you finished! congrats!");
+                    document.getElementById("complete").style.display = "block";
+                    clearInterval(interval);
+                    started = false;
+
+                }    
             }
         }
     }
@@ -173,7 +200,7 @@ function playerMovement(){
             baseVar.x = tempPlayerX;
         }
         //baseVar.x += dx; 
-        rightPressed = false;
+        //rightPressed = false;
     }
     else if(leftPressed){
         if(baseVar.x <= 0){
@@ -189,7 +216,7 @@ function playerMovement(){
             baseVar.x = tempPlayerX;
         }
         //baseVar.x -= dx;
-        leftPressed= false;
+        //leftPressed= false;
     }
 
     else if (spacePressed){
