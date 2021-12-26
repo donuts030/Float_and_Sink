@@ -1,3 +1,5 @@
+//import {mazeGenerator} from "./maze_DFS.js";
+
 const canvas=document.getElementById("playScreen");
 const ctx=canvas.getContext("2d");
 let interval = null;
@@ -16,7 +18,7 @@ const baseVar ={
     sink: true,
 
     //number of cells in a row and in a column: can change to 2 diff values later
-    cellNum: 10,
+    cellNum: 30,
 
     grid: [ [2, 1, 1, 1, 1, 1, 1, 1, 1, 0],
             [0, 0, 0, 0, 1, 0, 1, 0, 1, 0],
@@ -41,7 +43,8 @@ function inputMapSize(){
 }
 
 // this function would only be called once at the start
-function start(){  
+function start(){ 
+    baseVar.grid = mazeGenerator(baseVar.cellNum); 
     baseVar.x = 0;
     baseVar.y = 0;
     document.getElementById("complete").style.display = "none";
