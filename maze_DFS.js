@@ -7,7 +7,11 @@ const visited = [];
 
 const stack = [{currRow: 0, currCol: 0}];
 
-let longestStack = [];
+const longestStack = {
+    length: 0,
+    row: 0,
+    col: 0
+};
 
 let currRow = 0;
 let currCol = 0;
@@ -59,6 +63,8 @@ function mazeSearch(){
             stack.push({currRow, currCol});
             direction = Math.floor(Math.random() * 4);
             init = direction;
+            checkLongest()
+
         }
         else if((currRow + 2) < mazeSize  && direction === 1 && visited[currRow + 2][currCol] === 0 ){
             grid[currRow + 1][currCol] = 1;
@@ -67,6 +73,7 @@ function mazeSearch(){
             stack.push({currRow, currCol});
             direction = Math.floor(Math.random() * 4);
             init = direction;
+            checkLongest()
         }
         else if((currCol + 2) < mazeSize && direction === 2 && visited[currRow][currCol + 2] === 0){
             grid[currRow][currCol + 1] = 1;
@@ -75,6 +82,7 @@ function mazeSearch(){
             stack.push({currRow, currCol});
             direction = Math.floor(Math.random() * 4);
             init = direction;
+            checkLongest()
         }
         else if((currRow - 2)>= 0 && direction === 3 && visited[currRow - 2][currCol] === 0 ){
             grid[currRow - 1][currCol] = 1;
@@ -83,6 +91,7 @@ function mazeSearch(){
             stack.push({currRow, currCol});
             direction = Math.floor(Math.random() * 4);
             init = direction;
+            checkLongest()
         }
 
         else {
@@ -109,6 +118,7 @@ function mazeSearch(){
         }
         
     }
+    grid[longestStack.row][longestStack.col] = 3; //set end cell
 
 }
 
@@ -132,10 +142,26 @@ function createVisitedList(){
     //console.log(visited);
 }
 
+function moveGrid(wallRow, wallCol, visitRow, visitCol, moveDir){
+    grid[wallRow][wallCol] = 1;
+    visited[visitRow][visitCol] = 1;
+    currRow += moveDir;
+    stack.push({currRow, currCol});
+    return direction = Math.floor(Math.random() * 4);
+}
+
 function backtrack(){
     const currCell = stack.pop();
     currRow = currCell["currRow"];
     currCol = currCell["currCol"];
+}
+
+function checkLongest(){
+    if(longestStack.length < stack.length){
+        longestStack.length = stack.length;
+        longestStack.row = currRow;
+        longestStack.col = currCol;
+    }
 }
 
 
