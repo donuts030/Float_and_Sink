@@ -44,12 +44,14 @@ function startGrid(){
 
     grid[0][0] = 2;
 
-    //console.log(grid)
+    console.log(grid);
 }
 
 function mazeSearch(){
+    console.log("stack length: "+stack.length);
     let direction = Math.floor(Math.random() * 4) ;// 0 is top, 1 is right, 2 is bottom, 3 is left
     let init = direction;
+    let add = Math.floor(Math.random() * 2);
     // const top = grid[currRow][currCol - 2];
     // const right = grid[currRow + 2][currCol];
     // const bottom = grid[currRow][currCol + 2];
@@ -95,7 +97,6 @@ function mazeSearch(){
         }
 
         else {
-            let add = Math.floor(Math.random() * 2);
 
             if (add === 0){
                 if( ++ direction >= 4){
@@ -104,21 +105,23 @@ function mazeSearch(){
             }
 
             else{
-                if( -- direction <= 0){
-                    direction = 4;
+                if( -- direction < 0){
+                    direction = 3;
                 }
-            }
+            } 
             
             if(direction === init){
                 backtrack();
                 direction = Math.floor(Math.random() * 4);
                 init = direction;
+                add = Math.floor(Math.random() * 2);
             }
 
         }
         
     }
     grid[longestStack.row][longestStack.col] = 3; //set end cell
+
 
 }
 
