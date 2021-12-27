@@ -41,15 +41,19 @@ document.addEventListener("keyup", playerCtrlReleased);
 document.getElementById("submit").addEventListener("click", inputMapSize);
 
 function inputMapSize(){
-    if(started === false){
-        baseVar.cellNum = document.getElementById("input-box").value;
-        console.log(baseVar.cellNum);
+    const inputSize = document.getElementById("input-box").value;
+    if(inputSize <= 100){
+        if(started === false){
+            baseVar.cellNum = inputSize;
+        }
+        else{
+            baseVar.cellNum = inputSize;
+            clearInterval(interval);
+            start();
+        }
     }
-    else{
-        baseVar.cellNum = document.getElementById("input-box").value;
-        clearInterval(interval);
-        start();
-    }
+    else alert("Maze size cannot be larger than 100!");
+
 }
 
 // this function would only be called once at the start
