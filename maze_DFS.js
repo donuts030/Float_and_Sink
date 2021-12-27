@@ -1,11 +1,11 @@
 
 let mazeSize;
 
-const grid = [];
+let grid;
 
-const visited = [];
+let visited ;
 
-const stack = [{currRow: 0, currCol: 0}];
+let stack = [{currRow: 0, currCol: 0}];
 
 const longestStack = {
     length: 0,
@@ -19,6 +19,14 @@ let currCol = 0;
 
 function mazeGenerator(cellNum){
     mazeSize = cellNum;
+    grid = [];
+    visited = [];
+    stack = [{currRow: 0, currCol: 0}];
+    longestStack.length = 0;
+    longestStack.row = 0;
+    longestStack.col = 0;
+    currRow = 0;
+    currCol = 0;
     startGrid();
     createVisitedList();
     mazeSearch();
@@ -65,6 +73,7 @@ function mazeSearch(){
             stack.push({currRow, currCol});
             direction = Math.floor(Math.random() * 4);
             init = direction;
+            add = Math.floor(Math.random() * 2);
             checkLongest()
 
         }
@@ -75,6 +84,7 @@ function mazeSearch(){
             stack.push({currRow, currCol});
             direction = Math.floor(Math.random() * 4);
             init = direction;
+            add = Math.floor(Math.random() * 2);
             checkLongest()
         }
         else if((currCol + 2) < mazeSize && direction === 2 && visited[currRow][currCol + 2] === 0){
@@ -84,6 +94,7 @@ function mazeSearch(){
             stack.push({currRow, currCol});
             direction = Math.floor(Math.random() * 4);
             init = direction;
+            add = Math.floor(Math.random() * 2);
             checkLongest()
         }
         else if((currRow - 2)>= 0 && direction === 3 && visited[currRow - 2][currCol] === 0 ){
@@ -93,6 +104,7 @@ function mazeSearch(){
             stack.push({currRow, currCol});
             direction = Math.floor(Math.random() * 4);
             init = direction;
+            add = Math.floor(Math.random() * 2);
             checkLongest()
         }
 
@@ -145,14 +157,6 @@ function createVisitedList(){
     //console.log(visited);
 }
 
-function moveGrid(wallRow, wallCol, visitRow, visitCol, moveDir){
-    grid[wallRow][wallCol] = 1;
-    visited[visitRow][visitCol] = 1;
-    currRow += moveDir;
-    stack.push({currRow, currCol});
-    return direction = Math.floor(Math.random() * 4);
-}
-
 function backtrack(){
     const currCell = stack.pop();
     currRow = currCell["currRow"];
@@ -166,20 +170,3 @@ function checkLongest(){
         longestStack.col = currCol;
     }
 }
-
-
-
-/* function drawMaze(grid){
-    ctx.beginPath();
-    //number of cells in a row and in a column: can change to 2 diff values later
-    //const cellNum = 10 
-    for(let x = 0; x < baseVar.cellNum; x++){
-        for(let y = 0; y < baseVar.cellNum; y++){
-            let cellType = grid[y][x];
-            createBlock(x, y, cellType);
-        }
-    }
-    
-    ctx.closePath();
-    
-} */

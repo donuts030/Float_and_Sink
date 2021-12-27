@@ -8,7 +8,7 @@ let rightPressed = false;
 let leftPressed = false;
 let spacePressed = false;
 const xSpeed = 2;
-const ySpeed = 1;
+const ySpeed = 2;
 const baseVar ={
     x: 1,
     y: 1,
@@ -18,7 +18,7 @@ const baseVar ={
     sink: true,
 
     //number of cells in a row and in a column: can change to 2 diff values later
-    cellNum: 30,
+    cellNum: 20,
 
     grid: [ [2, 1, 1, 1, 1, 1, 1, 1, 1, 0],
             [0, 0, 0, 0, 1, 0, 1, 0, 1, 0],
@@ -32,18 +32,30 @@ const baseVar ={
             [0, 0, 0, 1, 1, 1, 1, 1, 0, 0],]
 }
 
-const cellLength = canvas.width / baseVar.cellNum;
-const playerSize = canvas.width / baseVar.cellNum - 1;
+
+let cellLength;
+let playerSize;
 
 document.addEventListener("keydown", playerCtrlPressed);
 document.addEventListener("keyup", playerCtrlReleased);
+document.getElementById("submit").addEventListener("click", inputMapSize);
 
 function inputMapSize(){
-
+    if(started === false){
+        baseVar.cellNum = document.getElementById("input-box").value;
+        console.log(baseVar.cellNum);
+    }
+    else{
+        baseVar.cellNum = document.getElementById("input-box").value;
+        clearInterval(interval);
+        start();
+    }
 }
 
 // this function would only be called once at the start
 function start(){ 
+    cellLength = canvas.width / baseVar.cellNum;
+    playerSize = canvas.width / baseVar.cellNum - 1;
     baseVar.grid = mazeGenerator(baseVar.cellNum); 
     baseVar.x = 0;
     baseVar.y = 0;
@@ -54,7 +66,6 @@ function start(){
 
 // this function runs once each time frame is refeshed
 function draw(){
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     createMaze(baseVar.grid);
     player();
@@ -88,16 +99,11 @@ function playerCtrlReleased(e){
     else if(e.keyCode === 37) {
         leftPressed = false;
     }
-/*     else if(e.keyCode === 32) { //left
-        spacePressed = false;
-    } */
 }
 
 
 function createMaze(grid){
     ctx.beginPath();
-    //number of cells in a row and in a column: can change to 2 diff values later
-    //const cellNum = 10 
     for(let x = 0; x < baseVar.cellNum; x++){
         for(let y = 0; y < baseVar.cellNum; y++){
             let cellType = grid[y][x];
@@ -126,7 +132,6 @@ function createBlock(x, y, cellType){
     }
     ctx.fillRect(x*cellLength, y*cellLength, cellLength, cellLength);
 
-    //ctx.fillStyle = 'rgb(' + parseInt(Math.random() * 255) + ',' + parseInt(Math.random() * 255) + ',' + parseInt(Math.random() * 255) + ')'
 }
 
 
@@ -135,7 +140,6 @@ function player(){
     ctx.beginPath();
     ctx.fillStyle = 'rgb(0, 255, 0)'
     ctx.fillRect(baseVar.x, baseVar.y, playerSize, playerSize);
-    //ctx.fillStyle = 'rgb(' + parseInt(Math.random() * 255) + ',' + parseInt(Math.random() * 255) + ',' + parseInt(Math.random() * 255) + ')'
     ctx.closePath();
     //player movement 
     playerMovement();
@@ -155,9 +159,7 @@ function collisionDetection(tempPlayerX, tempPlayerY){
                 //check if collided with player
                 if ((Math.abs(gridX - tempPlayerX) < playerWidth) 
                     && (Math.abs(gridY - tempPlayerY) < playerHeight )){
-                
-                    //console.log("collided at :" + row + ", "+ col);
-
+            
                     collided = true;
 
                 }
@@ -202,8 +204,6 @@ function playerMovement(){
         if (collisionDetection(tempPlayerX, tempPlayerY) === false) {
             baseVar.x = tempPlayerX;
         }
-        //baseVar.x += dx; 
-        //rightPressed = false;
     }
     else if(leftPressed){
         if(baseVar.x <= 0){
@@ -212,14 +212,12 @@ function playerMovement(){
         if(col < 0 ){
             dx = 0
         }
-        // if (baseVar.grid[row][col])
 
         tempPlayerX -= dx;
         if (collisionDetection(tempPlayerX, tempPlayerY) === false) {
             baseVar.x = tempPlayerX;
         }
-        //baseVar.x -= dx;
-        //leftPressed= false;
+
     }
 
     else if (spacePressed){

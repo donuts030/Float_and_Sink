@@ -25,13 +25,24 @@
                 <h1>FLOAT AND SINK</h1>
                 <h2>Press "space" to start</h2>
             </div>
-            <div class="playerInput" style="display: none;">
-                <h4>Input map size:</h4>
-                <input id="grid size">
+            <div id = "playerinput">
+                <h1>Please input size of maze:</h1>
+                <form>
+                    <input type="text" placeholder="maze size (max: 50)" id="input-box"/>
+                    <button type='button' id="submit">submit</button> 
+                </form>
+                
             </div>
             <div id="complete" style="display: none;">
                 <h1>You completed the maze! Congrats!</h1>
                 <h2>Press "space" to restart</h2>
+            </div>
+            <div class="instructions">
+                <h4>How to play</h4>
+                <ol>
+                    <li>Press "space" to change direction of up and down movement</li>
+                    <li>Press "left" and "right" arrow keys to move left and right respectively.</li>
+                </ol>
             </div>
 
         </div>
