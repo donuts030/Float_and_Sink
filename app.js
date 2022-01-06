@@ -42,7 +42,7 @@ document.getElementById("submit").addEventListener("click", inputMapSize);
 
 function inputMapSize(){
     const inputSize = document.getElementById("input-box").value;
-    if(inputSize <= 100){
+    if(inputSize <= 100 && inputSize > 0){
         if(started === false){
             baseVar.cellNum = inputSize;
         }
@@ -52,7 +52,10 @@ function inputMapSize(){
             start();
         }
     }
-    else alert("Maze size cannot be larger than 100!");
+    else if(inputSize <= 0){
+        alert("You must at least want to draw something on the maze right?")
+    }
+    else alert("Maze size cannot be larger than 100! 100 is hard enough! If you want to have a larger maze go code your own game!");
 
 }
 
@@ -82,7 +85,7 @@ function playerCtrlPressed(e){
     else if(e.keyCode === 37) { //left
         leftPressed = true;
     }
-    else if(e.keyCode === 32) { //left
+    else if(e.keyCode === 32) { //space
         e.preventDefault();
         console.log("pressed space");
         spacePressed = true;
