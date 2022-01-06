@@ -17,7 +17,7 @@ let currRow = 0;
 let currCol = 0;
 
 
-function mazeGenerator(cellNum) {
+export function mazeGenerator(cellNum) {
     mazeSize = cellNum;
     grid = [];
     visited = [];

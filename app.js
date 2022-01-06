@@ -1,4 +1,4 @@
-//import {mazeGenerator} from "./maze_DFS.js";
+import {mazeGenerator} from "./maze_DFS.js";
 
 const canvas=document.getElementById("playScreen");
 const ctx=canvas.getContext("2d");
@@ -53,7 +53,7 @@ function inputMapSize(){
         }
     }
     else if(inputSize <= 0){
-        alert("You must at least want to draw something on the maze right?")
+        alert("You must at minimum want to have a 1 x 1 maze right?")
     }
     else alert("Maze size cannot be larger than 100! 100 is hard enough! If you want to have a larger maze go code your own game!");
 
