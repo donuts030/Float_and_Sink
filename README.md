@@ -1,4 +1,4 @@
-# Project1_game
+# Float and Sink
 ### Problem statement:
 A maze game where the player has to transverse the maze to the end.
 ### User story:
